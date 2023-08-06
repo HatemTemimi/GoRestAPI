@@ -11,7 +11,7 @@ import (
 func main() {
 
 	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN:                  "user=postgres password=root dbname=api_db port=5432 sslmode=disable",
+		DSN:                  "host=localhost user=SuperUser password=SuperSecure dbname=postgres port=5432 sslmode=disable",
 		PreferSimpleProtocol: true, // disables implicit prepared statement usage
 	}), &gorm.Config{})
 	if err != nil {
