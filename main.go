@@ -3,26 +3,36 @@ package main
 import (
 	"apigo/product"
 
+	configs "apigo/config"
+	"fmt"
+
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 )
 
 func main() {
+	fmt.Println("into main.go")
 
-	db, err := gorm.Open(postgres.New(postgres.Config{
-		DSN:                  "host=localhost user=SuperUser password=SuperSecure dbname=postgres port=5432 sslmode=disable",
-		PreferSimpleProtocol: true, // disables implicit prepared statement usage
-	}), &gorm.Config{})
-	if err != nil {
-		panic(err)
-	}
+	configs.InitEnvConfigs()
+	fmt.Println(configs.EnvConfigs)
 
-	productRepository := product.ProvideProductRepostiory(db)
+	var db configs.Database
+	db.Create()
+	/*
+		//fmt.Println(viper.Get("DB_USER"))
+		dsn := fmt.Sprintf("host=localhost user=%s password=%s dbname=postgres port=%d sslmode=disable", configs.EnvConfigs.DB_USER, configs.EnvConfigs.DB_PASS, configs.EnvConfigs.DB_PORT)
+
+		db, err := gorm.Open(postgres.New(postgres.Config{
+			DSN:                  dsn,
+			PreferSimpleProtocol: true, // disables implicit prepared statement usage
+		}), &gorm.Config{})
+		if err != nil {
+			panic(err)
+		}
+	*/
+
+	productRepository := product.ProvideProductRepostiory(db.Db)
 	productService := product.ProvideProductService(productRepository)
 	productAPI := product.ProvideProductAPI(productService)
-
-	db.AutoMigrate(&product.Product{})
 
 	r := gin.Default()
 

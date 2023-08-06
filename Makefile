@@ -1,5 +1,13 @@
+ifneq (,$(wildcard ./app.env))
+    include app.env
+    export
+endif
+
 serve:
-	docker stop postgres-container
-	sleep 1
-	docker run -d -e TZ=UTC -p 5432:5432 -e POSTGRES_USER=SuperUser -e POSTGRES_PASSWORD=SuperSecure ubuntu/postgres:14-22.04_beta
+	npx kill-port 5432
+	docker stop postgres || true
+	docker rm postgres || true
+	docker run -d  --rm --name postgres  -e TZ=UTC -p $(DB_PORT):5432 -e POSTGRES_USER=$(DB_USER) -e POSTGRES_PASSWORD=$(DB_PASS) ubuntu/postgres:14-22.04_beta
+	sleep 3
 	go run main.go
+	
