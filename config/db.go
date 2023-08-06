@@ -1,7 +1,7 @@
 package configs
 
 import (
-	"apigo/product"
+	model "apigo/product/models"
 	"fmt"
 
 	"gorm.io/driver/postgres"
@@ -13,12 +13,13 @@ type Database struct {
 }
 
 func (d *Database) Create() {
-
+	//connection string
 	dsn := fmt.Sprintf("host=localhost user=%s password=%s dbname=postgres port=%d sslmode=disable",
 		EnvConfigs.DB_USER,
 		EnvConfigs.DB_PASS,
 		EnvConfigs.DB_PORT,
 	)
+	//connect
 	gormdb, err := gorm.Open(postgres.New(postgres.Config{
 		DSN:                  dsn,
 		PreferSimpleProtocol: true, // disables implicit prepared statement usage
@@ -27,5 +28,7 @@ func (d *Database) Create() {
 		panic(err)
 	}
 	d.Db = gormdb
-	d.Db.AutoMigrate(&product.Product{})
+
+	//migrate model
+	d.Db.AutoMigrate(&model.Product{})
 }

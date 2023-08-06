@@ -1,38 +1,26 @@
 package main
 
 import (
-	"apigo/product"
+	repository "apigo/product/repository"
+
+	service "apigo/product/service"
+
+	handler "apigo/product/handlers"
 
 	configs "apigo/config"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	fmt.Println("into main.go")
 
 	configs.InitEnvConfigs()
-	fmt.Println(configs.EnvConfigs)
-
 	var db configs.Database
 	db.Create()
-	/*
-		//fmt.Println(viper.Get("DB_USER"))
-		dsn := fmt.Sprintf("host=localhost user=%s password=%s dbname=postgres port=%d sslmode=disable", configs.EnvConfigs.DB_USER, configs.EnvConfigs.DB_PASS, configs.EnvConfigs.DB_PORT)
 
-		db, err := gorm.Open(postgres.New(postgres.Config{
-			DSN:                  dsn,
-			PreferSimpleProtocol: true, // disables implicit prepared statement usage
-		}), &gorm.Config{})
-		if err != nil {
-			panic(err)
-		}
-	*/
-
-	productRepository := product.ProvideProductRepostiory(db.Db)
-	productService := product.ProvideProductService(productRepository)
-	productAPI := product.ProvideProductAPI(productService)
+	productRepository := repository.ProvideProductRepostiory(db.Db)
+	productService := service.ProvideProductService(productRepository)
+	productAPI := handler.ProvideProductAPI(productService)
 
 	r := gin.Default()
 

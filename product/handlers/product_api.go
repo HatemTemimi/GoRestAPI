@@ -1,6 +1,8 @@
 package product
 
 import (
+	models "apigo/product/models"
+	service "apigo/product/service"
 	"log"
 	"net/http"
 	"strconv"
@@ -9,10 +11,10 @@ import (
 )
 
 type ProductAPI struct {
-	ProductService ProductService
+	ProductService service.ProductService
 }
 
-func ProvideProductAPI(p ProductService) ProductAPI {
+func ProvideProductAPI(p service.ProductService) ProductAPI {
 	return ProductAPI{ProductService: p}
 }
 
@@ -20,7 +22,7 @@ func (p *ProductAPI) FindAll(c *gin.Context) {
 	products := p.ProductService.FindAll()
 	c.JSON(http.StatusOK, gin.H{
 		"message":  "All Products",
-		"products": ToProductDTOs(products),
+		"products": models.ToProductDTOs(products),
 	})
 }
 
@@ -28,11 +30,11 @@ func (p *ProductAPI) FindByID(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	product := p.ProductService.FindByID(uint(id))
 
-	c.JSON(http.StatusOK, gin.H{"product": ToProductDTO(product)})
+	c.JSON(http.StatusOK, gin.H{"product": models.ToProductDTO(product)})
 }
 
 func (p *ProductAPI) Create(c *gin.Context) {
-	var productDTO ProductDTO
+	var productDTO models.ProductDTO
 	err := c.BindJSON(&productDTO)
 	if err != nil {
 		log.Fatalln(err)
@@ -40,15 +42,15 @@ func (p *ProductAPI) Create(c *gin.Context) {
 		return
 	}
 
-	createdProduct := p.ProductService.Save(ToProduct(productDTO))
+	createdProduct := p.ProductService.Save(models.ToProduct(productDTO))
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Product added",
-		"product": ToProductDTO(createdProduct)})
+		"product": models.ToProductDTO(createdProduct)})
 }
 
 func (p *ProductAPI) Update(c *gin.Context) {
-	var productDTO ProductDTO
+	var productDTO models.ProductDTO
 	err := c.BindJSON(&productDTO)
 	if err != nil {
 		log.Fatalln(err)
@@ -58,7 +60,7 @@ func (p *ProductAPI) Update(c *gin.Context) {
 
 	id, _ := strconv.Atoi(c.Param("id"))
 	product := p.ProductService.FindByID(uint(id))
-	if product == (Product{}) {
+	if product == (models.Product{}) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
@@ -73,7 +75,7 @@ func (p *ProductAPI) Update(c *gin.Context) {
 func (p *ProductAPI) Delete(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	product := p.ProductService.FindByID(uint(id))
-	if product == (Product{}) {
+	if product == (models.Product{}) {
 		c.Status(http.StatusBadRequest)
 		return
 	}

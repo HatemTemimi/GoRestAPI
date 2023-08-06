@@ -1,6 +1,7 @@
-package product
+package repository
 
 import (
+	model "apigo/product/models"
 	"fmt"
 
 	_ "gorm.io/driver/postgres"
@@ -15,8 +16,8 @@ func ProvideProductRepostiory(DB *gorm.DB) ProductRepository {
 	return ProductRepository{DB: DB}
 }
 
-func (p *ProductRepository) FindAll() []Product {
-	var products []Product
+func (p *ProductRepository) FindAll() []model.Product {
+	var products []model.Product
 	if p.DB.Find(&products).Error != nil {
 		fmt.Println("labes")
 	} else {
@@ -25,19 +26,19 @@ func (p *ProductRepository) FindAll() []Product {
 	return products
 }
 
-func (p *ProductRepository) FindByID(id uint) Product {
-	var product Product
+func (p *ProductRepository) FindByID(id uint) model.Product {
+	var product model.Product
 	p.DB.First(&product, id)
 
 	return product
 }
 
-func (p *ProductRepository) Save(product Product) Product {
+func (p *ProductRepository) Save(product model.Product) model.Product {
 	p.DB.Save(&product)
 
 	return product
 }
 
-func (p *ProductRepository) Delete(product Product) {
+func (p *ProductRepository) Delete(product model.Product) {
 	p.DB.Delete(&product)
 }
