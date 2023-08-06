@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// handles api requests
 type ProductAPI struct {
 	ProductService service.ProductService
 }
