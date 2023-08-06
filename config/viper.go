@@ -6,15 +6,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-// Initilize this variable to access the env values
 var EnvConfigs *envConfigs
 
-// We will call this in main.go to load the env variables
 func InitEnvConfigs() {
 	EnvConfigs = loadEnvVariables()
 }
 
-// struct to map env values
 type envConfigs struct {
 	DB_USER string
 	DB_PASS string
@@ -22,23 +19,22 @@ type envConfigs struct {
 	DB_PORT int64
 }
 
-// Call to load the variables from env
 func loadEnvVariables() (config *envConfigs) {
-	// Tell viper the path/location of your env file. If it is root just add "."
+	// path & location
 	viper.AddConfigPath(".")
 
-	// Tell viper the name of your file
+	// name if any
 	viper.SetConfigName("app")
 
-	// Tell viper the type of your file
+	// env
 	viper.SetConfigType("env")
 
-	// Viper reads all the variables from env file and log error if any found
+	// read vars
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatal("Error reading env file", err)
 	}
 
-	// Viper unmarshals the loaded env varialbes into the struct
+	// unmarshal into struct
 	if err := viper.Unmarshal(&config); err != nil {
 		log.Fatal(err)
 	}
