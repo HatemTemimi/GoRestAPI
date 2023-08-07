@@ -13,7 +13,7 @@ type Database struct {
 	Db *gorm.DB
 }
 
-func (d *Database) Create() error {
+func (d *Database) Connect() error {
 	//connection string
 	dsn := fmt.Sprintf("host=localhost user=%s password=%s dbname=postgres port=%d sslmode=disable",
 		EnvConfigs.DB_USER,
@@ -36,6 +36,16 @@ func (d *Database) Create() error {
 func (d *Database) Migrate() error {
 	//migrate model
 	if err := d.Db.AutoMigrate(&model.Product{}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (d *Database) Setup() error {
+	if err := d.Connect(); err != nil {
+		return err
+	}
+	if err := d.Migrate(); err != nil {
 		return err
 	}
 	return nil

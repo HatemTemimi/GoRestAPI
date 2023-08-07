@@ -10,13 +10,29 @@ import (
 	handler "apigo/internal/product/handlers"
 
 	configs "apigo/config"
+
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
+
+	swaggerFiles "github.com/swaggo/files"
+
+	_ "apigo/docs"
 )
+
+//	@title			Products API
+//	@version		1.0
+//	@description	REST API implementation with Go
+
+//	@license.name	Apache 2.0
+//	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
+
+//	@host		localhost:8080
+//	@BasePath	/products
 
 func main() {
 
 	configs.InitEnvConfigs()
 	var db configs.Database
-	db.Create()
+	db.Setup()
 
 	productRepository := repository.ProvideProductRepostiory(db.Db)
 	productService := service.ProvideProductService(productRepository)
@@ -24,6 +40,7 @@ func main() {
 
 	r := gin.Default()
 
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.GET("/products", productAPI.FindAll)
 	r.GET("/products/:id", productAPI.FindByID)
 	r.POST("/products", productAPI.Create)
