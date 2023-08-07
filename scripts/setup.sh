@@ -6,12 +6,15 @@ DB_PORT=5432
 
 (echo "=========Launch Start===========" & sleep 2)
 #set env
+
+(echo "=========Setting env===========" & sleep 2)
 rm -rf $(pwd)/app.env || true
 echo DB_USER=$DB_USER >> $(pwd)/app.env
 echo DB_PASS=$DB_PASS >> $(pwd)/app.env
 echo DB_PORT=$DB_PORT >> $(pwd)/app.env
 echo DB_NAME=$DB_NAME >> $(pwd)/app.env
 #kill activity on db port
+(echo "=========Cleaning port activity===========" & sleep 2)
 npm list -g npx || npm install -g npx
 npx kill-port $DB_PORT || true
 docker stop postgres || true
