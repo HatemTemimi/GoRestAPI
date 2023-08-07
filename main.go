@@ -1,15 +1,15 @@
 package main
 
 import (
-	repository "apigo/product/repository"
+	"github.com/gin-gonic/gin"
 
-	service "apigo/product/service"
+	repository "apigo/internal/product/repository"
 
-	handler "apigo/product/handlers"
+	service "apigo/internal/product/service"
+
+	handler "apigo/internal/product/handlers"
 
 	configs "apigo/config"
-
-	"github.com/gin-gonic/gin"
 )
 
 func main() {

@@ -29,7 +29,7 @@ func loadEnvVariables() (config *envConfigs) {
 	// env
 	viper.SetConfigType("env")
 
-	// read vars
+	// read global vars from env
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatal("Error reading env file", err)
 	}
