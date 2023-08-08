@@ -9,6 +9,10 @@ import (
 
 	handler "apigo/internal/product/handlers"
 
+	UserRepository "apigo/internal/user/repository"
+
+	UserService "apigo/internal/user/service"
+
 	userHandler "apigo/internal/user/handlers"
 
 	middleware "apigo/internal/middlewares"
@@ -42,12 +46,15 @@ func main() {
 	productService := service.ProvideProductService(productRepository)
 	productAPI := handler.ProvideProductAPI(productService)
 
-	userAPI := userHandler.MakeUserApi(db.Db)
+	userRepository := UserRepository.MakeUserRepository(db.Db)
+	userService := UserService.MakeUserService(userRepository)
+	userAPI := userHandler.ProvideUserApi(userService)
+	amw := middleware.MakeAuthMiddleware(userService)
 
 	r := gin.Default()
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	r.GET("/products", middleware.RequireAuth, productAPI.FindAll)
+	r.GET("/products", amw.RequireAuth, productAPI.FindAll)
 	r.GET("/products/:id", productAPI.FindByID)
 	r.POST("/products", productAPI.Create)
 	r.PUT("/products/:id", productAPI.Update)

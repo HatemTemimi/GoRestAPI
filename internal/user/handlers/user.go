@@ -26,6 +26,10 @@ func MakeUserApi(DB *gorm.DB) UserApi {
 	}
 }
 
+func ProvideUserApi(service service.UserService) UserApi {
+	return UserApi{UserService: service}
+}
+
 var req struct {
 	Email    string
 	Password string

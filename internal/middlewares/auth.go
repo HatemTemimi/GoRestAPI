@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"apigo/internal/user/service"
 	"fmt"
 	"net/http"
 	"os"
@@ -10,7 +11,15 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-func RequireAuth(c *gin.Context) {
+type AuthMiddleware struct {
+	userService service.UserService
+}
+
+func MakeAuthMiddleware(service service.UserService) AuthMiddleware {
+	return AuthMiddleware{userService: service}
+}
+
+func (m *AuthMiddleware) RequireAuth(c *gin.Context) {
 	tokenString, err := c.Cookie("Authorization")
 	if err != nil {
 		c.AbortWithStatus(http.StatusUnauthorized)
@@ -33,7 +42,13 @@ func RequireAuth(c *gin.Context) {
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
+		user, err := m.userService.FindByID(uint(claims["sub"].(uint)))
+		if err != nil || user.ID == 0 {
+			c.AbortWithStatus(http.StatusUnauthorized)
+		}
+		fmt.Println("logged user", user)
 		c.Next()
+
 	} else {
 		//abort
 		c.AbortWithStatus(http.StatusUnauthorized)

@@ -29,9 +29,9 @@ func (u *UserRepository) FindByEmail(email string) (*models.User, error) {
 	return &user, nil
 }
 
-func (u *UserRepository) FindByID(usr models.User) (*models.User, error) {
+func (u *UserRepository) FindByID(id uint) (*models.User, error) {
 	user := models.User{}
-	if err := u.DB.First(&user).Error; err != nil {
+	if err := u.DB.First(&user, id).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil

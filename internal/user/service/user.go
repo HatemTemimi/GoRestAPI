@@ -33,3 +33,14 @@ func (u *UserService) FindByEmail(email string) (*models.User, error) {
 	}
 	return user, nil
 }
+
+func (u *UserService) FindByID(id uint) (*models.User, error) {
+	user, err := u.UserRepository.FindByID(id)
+	if err != nil {
+		return nil, err
+	}
+	if user.ID == 0 {
+		return nil, errors.New("invalid email or password")
+	}
+	return user, nil
+}
