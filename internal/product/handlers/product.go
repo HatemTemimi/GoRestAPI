@@ -56,7 +56,6 @@ func (p *ProductAPI) FindAll(c *gin.Context) {
 func (p *ProductAPI) FindByID(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	product := p.ProductService.FindByID(uint(id))
-
 	c.JSON(http.StatusOK, gin.H{"product": models.ToProductDTO(product)})
 }
 

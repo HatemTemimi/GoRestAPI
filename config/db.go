@@ -6,7 +6,9 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
-	model "apigo/internal/product/models"
+	product "apigo/internal/product/models"
+
+	user "apigo/internal/user/models"
 )
 
 type Database struct {
@@ -35,7 +37,7 @@ func (d *Database) Connect() error {
 
 func (d *Database) Migrate() error {
 	//migrate model
-	if err := d.Db.AutoMigrate(&model.Product{}); err != nil {
+	if err := d.Db.AutoMigrate(&product.Product{}, &user.User{}); err != nil {
 		return err
 	}
 	return nil

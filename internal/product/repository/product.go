@@ -2,6 +2,7 @@ package repository
 
 import (
 	"fmt"
+	"log"
 
 	_ "gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -20,7 +21,7 @@ func ProvideProductRepostiory(DB *gorm.DB) ProductRepository {
 func (p *ProductRepository) FindAll() []model.Product {
 	var products []model.Product
 	if p.DB.Find(&products).Error != nil {
-		fmt.Println("labes")
+		log.Println("labes")
 	} else {
 		fmt.Println("mochkla")
 	}
