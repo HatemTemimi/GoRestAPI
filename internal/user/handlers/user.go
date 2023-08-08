@@ -103,6 +103,23 @@ func (u *UserApi) Login(c *gin.Context) {
 
 	c.SetSameSite(http.SameSiteLaxMode)
 	c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
-	c.JSON(http.StatusOK, gin.H{})
+	c.Set("user", user)
+	c.JSON(http.StatusOK, gin.H{
+		"user": user,
+	})
 
+}
+
+func (m *UserApi) Validate(c *gin.Context) {
+	token, err := c.Cookie("Authorization")
+	if err != nil || token == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"status": "Not logged in",
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"status": "logged in",
+			"token":  token,
+		})
+	}
 }

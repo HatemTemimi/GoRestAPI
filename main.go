@@ -62,7 +62,7 @@ func main() {
 
 	r.POST("/auth/signup", userAPI.Signup)
 	r.POST("/auth/login", userAPI.Login)
-	r.GET("/auth/status", authMiddleware.Validate)
+	r.GET("/auth/status", userAPI.Validate)
 
 	r.Run()
 
