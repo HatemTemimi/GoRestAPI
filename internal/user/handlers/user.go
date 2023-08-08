@@ -34,6 +34,18 @@ var req struct {
 	Password string
 }
 
+// Signup creates a user
+//
+//	@Summary		creates a user
+//	@Description	creates a user
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}		models.User
+//	@Failure		400	{object}	error
+//	@Failure		404	{object}	error
+//	@Failure		500	{object}	error
+//	@Router			/auth/signin [post]
 func (u *UserApi) Signup(c *gin.Context) {
 	//check request
 	if c.Bind(&req) != nil {
@@ -63,6 +75,18 @@ func (u *UserApi) Signup(c *gin.Context) {
 
 }
 
+// Login logs user
+//
+//	@Summary		logs a user in
+//	@Description	logs a user in
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}		models.User
+//	@Failure		400	{object}	error
+//	@Failure		404	{object}	error
+//	@Failure		500	{object}	error
+//	@Router			/auth/login [post]
 func (u *UserApi) Login(c *gin.Context) {
 	//check request
 	if c.Bind(&req) != nil {
@@ -110,6 +134,18 @@ func (u *UserApi) Login(c *gin.Context) {
 
 }
 
+// Validate checks user login status
+//
+//	@Summary		checks user login status
+//	@Description	checks user login status
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}		models.User
+//	@Failure		400	{object}	error
+//	@Failure		404	{object}	error
+//	@Failure		500	{object}	error
+//	@Router			/auth/status [get]
 func (m *UserApi) Validate(c *gin.Context) {
 	token, err := c.Cookie("Authorization")
 	if err != nil || token == "" {

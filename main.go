@@ -55,10 +55,10 @@ func main() {
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.GET("/products", authMiddleware.RequireAuth, productAPI.FindAll)
-	r.GET("/products/:id", productAPI.FindByID)
-	r.POST("/products", productAPI.Create)
-	r.PUT("/products/:id", productAPI.Update)
-	r.DELETE("/products/:id", productAPI.Delete)
+	r.GET("/products/:id", authMiddleware.RequireAuth, productAPI.FindByID)
+	r.POST("/products", authMiddleware.RequireAuth, productAPI.Create)
+	r.PUT("/products/:id", authMiddleware.RequireAuth, productAPI.Update)
+	r.DELETE("/products/:id", authMiddleware.RequireAuth, productAPI.Delete)
 
 	r.POST("/auth/signup", userAPI.Signup)
 	r.POST("/auth/login", userAPI.Login)
