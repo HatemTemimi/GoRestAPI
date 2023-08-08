@@ -49,12 +49,12 @@ func main() {
 	userRepository := UserRepository.MakeUserRepository(db.Db)
 	userService := UserService.MakeUserService(userRepository)
 	userAPI := userHandler.ProvideUserApi(userService)
-	amw := middleware.MakeAuthMiddleware(userService)
+	authMiddleware := middleware.MakeAuthMiddleware(userService)
 
 	r := gin.Default()
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	r.GET("/products", amw.RequireAuth, productAPI.FindAll)
+	r.GET("/products", authMiddleware.RequireAuth, productAPI.FindAll)
 	r.GET("/products/:id", productAPI.FindByID)
 	r.POST("/products", productAPI.Create)
 	r.PUT("/products/:id", productAPI.Update)
