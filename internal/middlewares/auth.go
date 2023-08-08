@@ -42,13 +42,13 @@ func (m *AuthMiddleware) RequireAuth(c *gin.Context) {
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
-		user, err := m.userService.FindByID(uint(claims["sub"].(uint)))
+		//notorize user with id on cookie
+		user, err := m.userService.FindByID(uint(claims["sub"].(float64)))
 		if err != nil || user.ID == 0 {
 			c.AbortWithStatus(http.StatusUnauthorized)
 		}
-		fmt.Println("logged user", user)
+		//continue
 		c.Next()
-
 	} else {
 		//abort
 		c.AbortWithStatus(http.StatusUnauthorized)
