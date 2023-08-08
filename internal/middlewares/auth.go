@@ -54,3 +54,18 @@ func (m *AuthMiddleware) RequireAuth(c *gin.Context) {
 		c.AbortWithStatus(http.StatusUnauthorized)
 	}
 }
+
+func (m *AuthMiddleware) Validate(c *gin.Context) {
+	user, _ := c.Get("user")
+	/*if !exists {
+		c.JSON(http.StatusOK, gin.H{
+			"status": "Not logged in",
+		})
+	} else {
+	*/
+	c.JSON(http.StatusOK, gin.H{
+		"status": "logged in",
+		"user":   user,
+	})
+	//}
+}
