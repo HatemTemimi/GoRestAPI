@@ -4,7 +4,6 @@ import (
 	"apigo/internal/user/models"
 	"apigo/internal/user/repository"
 	"apigo/internal/user/service"
-	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -65,8 +64,6 @@ func (u *UserApi) Signup(c *gin.Context) {
 }
 
 func (u *UserApi) Login(c *gin.Context) {
-
-	fmt.Println("user login")
 	//check request
 	if c.Bind(&req) != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
