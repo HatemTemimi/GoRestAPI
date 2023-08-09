@@ -2,6 +2,7 @@ package configs
 
 import (
 	"log"
+	"os"
 
 	"github.com/spf13/viper"
 )
@@ -20,14 +21,13 @@ type envConfigs struct {
 }
 
 func loadEnvVariables() (config *envConfigs) {
-	// path & location
-	viper.AddConfigPath(".")
 
-	// name if any
-	viper.SetConfigName("app")
+	workingdir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	// env
-	viper.SetConfigType("env")
+	viper.SetConfigFile(workingdir + "/.env")
 
 	// read global vars from env
 	if err := viper.ReadInConfig(); err != nil {
