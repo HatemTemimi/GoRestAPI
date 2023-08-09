@@ -4,8 +4,6 @@ DB_PASS=root
 DB_NAME=productsapi
 DB_PORT=5432
 
-
-
 (echo "Launch start.." & sleep 2)
 (echo "Installing dependencies..")
 go install
