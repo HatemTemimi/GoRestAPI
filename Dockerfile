@@ -24,6 +24,11 @@ WORKDIR /
 # Move Deps from build image
 COPY --from=build /app/products-api /products-api
 
+RUN echo DB_USER=$DB_USER >> /.env
+RUN echo DB_PASS=$DB_PASS >> /.env
+RUN echo DB_PORT=$DB_PORT >> /.env
+RUN echo DB_NAME=$DB_NAME >> /.env
+
 EXPOSE 8080
 
 ENTRYPOINT ["/products-api"]
